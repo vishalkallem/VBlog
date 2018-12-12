@@ -1,0 +1,46 @@
+{% extends "base.html" %} {% block head_title %} {{ post.title | title }} | {{ block.super }} {% endblock head_title %} 
+
+{%block content %}
+<div class="ui main text container segment">
+    <div class="ui huge header">{{ post.title | title }}</div>
+    {% if post.draft %}
+    <div class="right floated ui labeled button" tabindex="0">
+            <div class="ui red button">
+              <i class="envelope open outline icon"></i>
+            </div>
+            <a class="ui basic red left pointing label">
+              Draft
+            </a>
+          </div>
+    {% endif %} 
+    {% if post.user.get_full_name %}
+    <h5 style="margin-top:0" class="ui header">
+            {{ post.user.get_full_name | title }}
+            <div class="sub header">{{ post.timestamp | timesince }} ago</div>
+    </h5>
+    {% endif %}
+
+    
+    <div class="ui top attached">
+        <div class="item">
+            {% if post.image %}
+            {% load static %}
+            <div class="ui segment">
+                <img class="ui centered rounded image" src="{{ post.image.url }}" />
+            </div>
+            {% endif %}
+            <div class="description ui segment">
+                {{ post.content | linebreaks }}
+            </div>
+            <br>
+            <br>
+                <div class="fb-like" data-href="{{ request.build_absolute_uri }}" data-layout="button_count" data-action="like"
+                    data-show-faces="true" data-share="true">
+                </div>
+                <hr/>
+            <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

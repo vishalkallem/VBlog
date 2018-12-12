@@ -1,0 +1,26 @@
+*{
+    font-size:14px;
+}
+
+i.lightbulb{
+    font-size:2em;
+}
+
+.main-content{
+    margin-top:80px;
+    margin-bottom:50px;
+}
+
+.ui.text.container{
+    max-width: 900px !important;
+}
+
+.align-paginator{
+    display:flex;
+    justify-content:center;
+    margin-bottom:30px;
+}
+
+.description{
+    margin-top:20px;
+}

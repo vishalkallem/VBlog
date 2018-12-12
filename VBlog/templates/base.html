@@ -1,0 +1,86 @@
+{% load staticfiles %}
+<!--DOCTYPE html -->
+<html>
+
+<head>
+  <title>{% block head_title %}VBlog | A simple blog app{% endblock head_title %}</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.0/dist/semantic.min.css">
+
+  <link rel='stylesheet' href='{% static "css/base.css" %}' />
+  <style>
+    {% block style %}
+    {% endblock style %}
+  </style>
+</head>
+
+<body>
+  <div id="fb-root"></div>
+  <script>(function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
+  <div class="ui fixed inverted menu">
+    <div class="ui container">
+      <a class="header item" href="/posts">
+        <i class="icon lightbulb outline"></i>VBlog</a>
+      <a class="item" href="{% url 'posts:create' %}">Create Post</a>
+      <a class="item" href="{% url 'posts:my_posts' %}">My Posts</a>
+      <div class="right menu">
+        <div class="item">
+          <form class="ui icon input" method='GET' action=''>
+            <input type="text" name='q' placeholder="Search..." value='{{ request.GET.q }}'>
+            <i class="search link icon"></i>
+          </form>
+        </div>
+        <a href="/logout" class="item">Logout</a>
+      </div>
+    </div>
+  </div>
+
+  <div class='main-content'>
+
+    {%if messages %}
+    <div style="max-width: 900px !important;" class="ui container fixed success message">
+      <i class="close icon"></i>
+      {% for message in messages %}
+      <div class="header">
+        {{message}}
+      </div>
+      {% endfor %}
+    </div>
+    {%endif%} 
+    
+    {% block content %}{% endblock content %}
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.0/dist/semantic.min.js"></script>
+
+  <script>
+    function postDelete(counter) {
+      $('.ui.basic.modal').modal({
+        onApprove: function () {
+          document.getElementById(`del${counter}`).submit();
+        }
+      }).modal('show')
+    }
+
+    $('.message .close')
+      .on('click', function () {
+        $(this)
+          .closest('.message')
+          .transition('fade');
+      });
+
+    $('.ui.checkbox')
+      .checkbox();
+  </script>
+</body>
+
+</html>

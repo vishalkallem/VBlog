@@ -1,0 +1,32 @@
+{% extends 'base.html' %} {% block content %}
+<div class='ui main text container segment'>
+    <div class="ui huge header">Edit Blog</div>
+    <form class="ui form" method='POST' action='' enctype='multipart/form-data'>
+        {% csrf_token %}
+        <div class="field">
+            <label for="{{ form.title.id_for_label }}">Title:</label>
+            {{ form.title }}
+        </div>
+        <div class="field">
+            <label for="{{ form.content.id_for_label }}">Blog content:</label>
+            {{ form.content }}
+        </div>
+        <div class="field">
+            <label for="{{ form.image.id_for_label }}">Image: </label>
+            {{ form.image }}
+        </div>
+        <div class="field">
+            <div class="inline field">
+                <div class="ui toggle checkbox">
+                    <label for="{{ form.draft.id_for_label }}">Draft</label>
+                    {{ form.draft }}
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="ui violet basic button">
+            <i class="cloud icon"></i>
+            Save
+        </button>
+    </form>
+</div>
+{% endblock %}

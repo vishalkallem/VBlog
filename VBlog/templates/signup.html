@@ -1,0 +1,53 @@
+{% load staticfiles %}
+<html>
+
+<head>
+    <title>{% block head_title %}VBlog | Sing Up{% endblock head_title %}</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.0/dist/semantic.min.css">
+    <link rel='stylesheet' href='{% static "css/base.css" %}' />
+</head>
+
+<body>
+    <div class="main-content">
+        <div class='ui main text container segment'>
+            <div class="ui huge header">Signup | VBlog</div>
+            <form class="ui form" method='POST' action='' enctype='multipart/form-data'>
+                {% csrf_token %} {{form.as_p}}
+                <button type="submit" class="ui green button">SignUp</button>
+            </form>
+            <div class="ui small header">Already a User?
+                <a href="/login">Login</a>
+            </div>
+        {%if messages %}
+        <div style="max-width: 900px !important;" class="ui container fixed success message">
+              <i class="close icon"></i>
+              {% for message in messages %}
+              <div class="header">
+                {{message}}
+              </div>
+              {% endfor %}
+        </div>
+        {%endif%}
+    </div>
+</div>
+<script>
+    function postDelete(counter) {
+      $('.ui.basic.modal').modal({
+        onApprove: function () {
+          document.getElementById(`del${counter}`).submit();
+        }
+      }).modal('show')
+    }
+
+    $('.message .close')
+      .on('click', function () {
+        $(this)
+          .closest('.message')
+          .transition('fade');
+      });
+
+    $('.ui.checkbox')
+      .checkbox();
+  </script>
+</body>

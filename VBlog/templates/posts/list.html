@@ -1,0 +1,94 @@
+{% extends 'base.html' %} {% block content %}
+<div class="ui main text container segment">
+    <div class="ui divided items">
+        {% if posts.count == 0 %}
+            <h1>No posts found! Why don't you create one <a href="{% url 'posts:create' %}>here.</a></h1>
+        {% endif %}
+        {% for post in posts %}
+        <div class="item">
+            <div class="image">
+                {% if post.draft%}
+                    <a class="ui red ribbon label">Draft</a>
+                {%endif%}
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" />
+                {%else %}
+                {% load static %}
+                    <img src="{% static 'images/wireframe.png' %}">
+                {% endif %}
+            </div>
+            <div class="content">
+                <a class="header" href="{% url 'posts:detail' slug=post.slug %}">{{ post.title | title }}</a>
+                <div class="right floated ui buttons">
+                    {% if post.user.id == request.user.id %}
+                    <a href="{% url 'posts:edit' slug=post.slug %}" class="tiny ui icon button"><i class="icon pencil alternate"> </i> </a>
+                    <div class="or"></div>
+                    <div style="display:none;"><form id="del{{forloop.counter}}" method="post" action="{% url 'posts:delete' slug=post.slug %}">{% csrf_token %}</form></div>
+                    
+                    <button onclick="postDelete({{forloop.counter}});" class="tiny ui icon button"><i class="icon trash alternate"> </i> </button>
+                    {%endif%}
+                </div>
+                <div class="meta">
+                    <span class="cinema">{{ post.timestamp | timesince }} ago by {{ post.user.get_full_name | title }}</span>
+                </div>
+                <div class="description">
+                    <p>{{ post.content | linebreaks | truncatechars:120 }}</p>
+                </div>
+                <div class="extra">
+                    <a href="{{ post.get_absolute_url }}" class="ui right floated primary button">
+                        View
+                        <i class="right chevron icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="ui basic modal">
+    <div class="ui icon header">
+        <i class="archive icon"></i>
+        Delete Post?
+    </div>
+    <div class="content">
+        <p style="text-align: center">Do you want to Delete this post? This action cannot be undone!</p>
+    </div>
+    <div class="actions">
+        <div class="ui red basic cancel inverted button">
+            <i class="remove icon"></i>
+            No
+            </div>
+            <div id='yesDelete'class="ui green ok inverted button">
+            <i class="checkmark icon"></i>
+            Yes
+        </div>
+    </div>
+</div>
+
+<div class='align-paginator'>
+<div class="ui pagination menu">
+    {% if page_obj.has_previous %}
+        <a class="item" href="?page={{ page_obj.previous_page_number }}"><i class="icon angle left"></i></a>
+    {% else %}
+        <a class="disabled item"><i class="icon angle left"></i></a>
+    {% endif %}
+
+    {% for i in paginator.page_range %}
+        {% if page_obj.number == i %}
+            <a class="item active">{{ i }}</a>
+        {% else %}
+            <a href="?page={{ i }}" class="item">{{ i }}</a>
+        {% endif %}
+    {% endfor %}
+
+
+    {% if page_obj.has_next %}
+        <a  href="?page={{ page_obj.next_page_number }}" class="item"><i class="icon angle right"></i></a>
+    {% else %}
+        <a class="disabled item"><i class="icon angle right"></i></a>
+  {% endif %}
+</div>
+</div>
+
+{% endblock %}
